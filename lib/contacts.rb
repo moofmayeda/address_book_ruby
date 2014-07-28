@@ -1,8 +1,24 @@
 class Contact
+  @@all_names = []
+
+  def Contact.all_names
+    @@all_names
+  end
+
+  def save
+    @@all_names << self.name
+  end
+
+  def Contact.clear
+    @@all_names = []
+  end
+
   def initialize (first, last)
     @first_name = first
     @last_name = last
-    @phones = []
+    @phones = {}
+    @emails = []
+    @addresses = {}
   end
 
   def name
@@ -13,50 +29,42 @@ class Contact
     @first_name
   end
 
+  def edit_first_name(new_name)
+    @first_name = new_name
+  end
+
   def last_name
     @last_name
   end
 
   def add_phone(phone)
-    @phones << phone
+    @phones[phone.description] = phone.number
   end
 
   def phone
-    @phones[0]
-  end
-end
-
-class Phone
-  def initialize(description, number)
-    @description = description
-    @number = number
+    @phones
   end
 
-  def number
-    @number
+  def add_email(email)
+    @emails << email
   end
-
-  def description
-    @description
-  end
-end
-
-class Email
-  def initialize(email)
-    @email = email
-  end
-
   def email
-    @email
+    @emails
   end
-end
 
-class Address
-  def initialize(address)
-    @address = address
+  def add_address(address)
+    @addresses[address.description] = address.address
   end
 
   def address
-    @address
+    @addresses.values[0]
   end
+
+  # def view
+  #   p "First Name: #{@first_name} \n Last Name: #{@last_name} \n #{@phones.keys[0]} Phone: #{@phones.values[0]} \n Email: #{@emails[0].email} \n #{@addresses.keys[0]} Address: #{@addresses.values[0]}"
+  # end
 end
+
+
+
+
