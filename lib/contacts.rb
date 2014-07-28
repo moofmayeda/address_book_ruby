@@ -1,16 +1,25 @@
 class Contact
-  @@all_names = []
+  @@all_contacts = []
 
-  def Contact.all_names
-    @@all_names
+  def Contact.all_contacts
+    @@all_contacts
   end
 
   def save
-    @@all_names << self.name
+    @@all_contacts << self
   end
 
   def Contact.clear
-    @@all_names = []
+    @@all_contacts = []
+  end
+
+  def delete_contact
+    @@all_contacts.delete(self)
+    @addresses = {}
+    @emails = []
+    @phones = {}
+    @first_name = ""
+    @last_name = ""
   end
 
   def initialize (first, last)
@@ -37,12 +46,20 @@ class Contact
     @last_name
   end
 
+  def edit_last_name(new_name)
+    @last_name = new_name
+  end
+
   def add_phone(phone)
     @phones[phone.description] = phone.number
   end
 
   def phone
     @phones
+  end
+
+  def edit_phone_number(phone_object, new_number)
+    @phones[phone_object.description] = new_number
   end
 
   def add_email(email)
@@ -57,7 +74,11 @@ class Contact
   end
 
   def address
-    @addresses.values[0]
+    @addresses
+  end
+
+  def edit_address (address_object, new_address)
+    @addresses[address_object.description] = new_address
   end
 
   # def view

@@ -59,7 +59,7 @@ describe "Contact" do
       test_contact = Contact.new("Kyle", "Boe")
       test_address = Address.new("home","123 Main St Portland OR 98685")
       test_contact.add_address(test_address)
-      test_contact.address.should eq "123 Main St Portland OR 98685"
+      test_contact.address["home"].should eq "123 Main St Portland OR 98685"
     end
   end
   describe "edit_first_name" do
@@ -76,6 +76,43 @@ describe "Contact" do
       test_contact.last_name.should eq "Bow"
     end
   end
+  describe "edit_phone_number" do
+    it "edits a contact's phone number" do
+      test_contact = Contact.new("Kyle", "Boe")
+      home_phone = Phone.new("home",3606087875)
+      work_phone = Phone.new("work",4656087875)
+      test_contact.add_phone(home_phone)
+      test_contact.add_phone(work_phone)
+      test_contact.edit_phone_number(work_phone, 5656087875)
+      test_contact.phone["work"].should eq 5656087875
+    end
+  end
+  describe "edit_address" do
+    it "edits a contact's address" do
+      test_contact = Contact.new("Kyle", "Boe")
+      test_address = Address.new("home","123 Main St Portland OR 98685")
+      test_contact.add_address(test_address)
+      test_contact.edit_address(test_address, "456 Couch St Portland OR 12345")
+      test_contact.address["home"].should eq "456 Couch St Portland OR 12345"
+    end
+  end
+
+  describe "delete_contact" do
+    it "deletes a contact" do
+      test_contact = Contact.new("Kyle","Boe")
+      test_address = Address.new("home","123 Main St Portland OR 98685")
+      home_phone = Phone.new("home",3606087875)
+      email1 = Email.new("ksboe1@gmail.com")
+      test_contact.add_address(test_address)
+      test_contact.add_phone(home_phone)
+      test_contact.add_email(email1)
+      test_contact.save
+      test_contact.delete_contact
+      Contact.all_contacts.should eq []
+      test_contact.phone["home"].should eq nil
+      test_contact.email.should eq []
+    end
+  end
   # describe "view" do
     # it "should return everything in the contact" do
     #   test_contact = Contact.new("Kyle", "Boe")
@@ -88,21 +125,21 @@ describe "Contact" do
     #   test_contact.view.should eq "First Name: Kyle \n Last Name: Boe \n mobile Phone: 3606087875 \n Email: ksboe1@gmail.com \n home Address: 123 Main St Portland OR 98685"
     # end
   # end
-  describe ".all_names" do
+  describe ".all_contacts" do
     it "is empty at first" do
-      Contact.all_names.should eq []
+      Contact.all_contacts.should eq []
     end
-    it "should add a name to the contact list of names" do
+    it "should add a contact to the contact list of names" do
       test_contact = Contact.new("Kyle", "Boe")
       test_contact.save
-      Contact.all_names.should eq ["Kyle Boe"]
+      Contact.all_contacts.should eq [test_contact]
     end
   end
   describe ".clear" do
     it "empties all the contacts" do
       test_contact = Contact.new("Kyle", "Boe").save
       Contact.clear
-      Contact.all_names.should eq []
+      Contact.all_contacts.should eq []
     end
   end
 end
